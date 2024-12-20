@@ -1,0 +1,74 @@
+﻿@model IEnumerable<WebNews.Models.DanhMuc>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin.cshtml";
+}
+
+<div class="container-full">
+    <h2>Danh Mục</h2>
+
+    <p>
+        @Html.ActionLink("Thêm Mới", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TenDanhMuc)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.MoTa)
+                    </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayTao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Anh)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenDanhMuc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MoTa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Anh))
+                    {
+                        <img src="@Url.Content("~/Hinhsanpham/" + item.Anh)" alt="Ảnh bìa" style="width: 120px; height: 50px; object-fit: cover" />
+                    }
+                </td>
+
+                <td>
+                    <!-- Edit button with icon -->
+                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-sm btn-primary text-decoration-none">
+                        <i class="bi bi-pencil"></i>
+                    </a> |
+
+                    <!-- Details button with icon -->
+                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-sm btn-info text-decoration-none">
+                        <i class="bi bi-eye"></i>
+                    </a> |
+
+                    <!-- Delete button with icon -->
+                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-sm btn-danger text-decoration-none">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+
+            </tr>
+        }
+
+    </table>
+
+</div>
+

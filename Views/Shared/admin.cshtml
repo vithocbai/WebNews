@@ -1,0 +1,424 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Tin Tức</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #mainContent {
+            transition: width 0.3s ease;
+        }
+
+        #sidebar {
+            transition: width 0.3s ease;
+        }
+
+        .collapsed {
+            width: 60px;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: #e4e4e4;
+        }
+
+        .sidebar {
+            background-color: #343a40;
+            color: #fff;
+            height: 100vh;
+            transition: width 0.3s;
+            overflow-y: auto;
+            border-right: 5px solid #007bff;
+            height: 100vh;
+        }
+
+            .sidebar.collapsed {
+                width: 60px;
+            }
+
+                .sidebar.collapsed .nav-link span {
+                    display: none;
+                }
+
+                .sidebar.collapsed h5 {
+                    display: none;
+                }
+
+            .sidebar h5 {
+                color: #ffc107;
+                font-size: 1.4rem;
+                text-transform: uppercase;
+                margin-top: 16px;
+            }
+
+            .sidebar .nav-link {
+                color: #adb5bd;
+                font-size: 1.4rem;
+                padding: 16px;
+            }
+
+                .sidebar .nav-link.active {
+                    color: #fff;
+                    background-color: #495057;
+                }
+
+                .sidebar .nav-link i {
+                    margin-right: 10px;
+                }
+
+        .cards {
+            margin-top: 16px;
+        }
+
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .table-responsive {
+            padding: 10px;
+            height: 580px;
+            box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+        }
+
+        .container-full {
+            width: 100%;
+            padding: 20px 20px 0;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* CSS cho bảng */
+        .table {
+            width: 100%; /* Chiếm toàn bộ chiều ngang */
+
+            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các ô */
+            table-layout: fixed; /* Bắt buộc các cột có chiều rộng cố định */
+        }
+
+            .table th, .table td {
+                padding: 12px 15px;
+                text-align: left;
+                border: 1px solid #ddd; /* Đường viền bảng */
+                overflow: hidden; /* Ẩn nội dung tràn */
+                white-space: nowrap; /* Không xuống dòng */
+                text-overflow: ellipsis; /* Thêm dấu 3 chấm nếu nội dung dài quá */
+            }
+
+            /* Thêm hiệu ứng hover */
+            .table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+
+            /* Phần tiêu đề bảng */
+            .table th {
+                background-color: #007bff;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
+        /* Nút bấm */
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            border: none;
+            color: #000;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+        /* Phần cuối bảng */
+        .table-actions {
+            text-align: center;
+        }
+
+        /* Phần chữ dài trong bảng */
+        .text-truncate {
+            display: block;
+            width: 100%;
+            white-space: nowrap; /* Không xuống dòng */
+            overflow: hidden; /* Ẩn nội dung tràn */
+            text-overflow: ellipsis; /* Thêm dấu "..." */
+        }
+
+        .topbar {
+            background-color: #fff;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+        }
+
+            .topbar .dark-mode-toggle {
+                cursor: pointer;
+            }
+
+        main {
+            transition: margin-left 0.3s;
+        }
+
+        .main-expanded {
+            margin-left: 60px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 5px 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+            .search-bar input {
+                border: none;
+                outline: none;
+                flex: 1;
+                padding-left: 10px;
+            }
+
+            .search-bar i {
+                color: #6c757d;
+            }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-2 d-md-block sidebar">
+                <div class="position-sticky">
+                    <h5 class="pt-3 ps-3">Quản lý tin tức</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="@Url.Action("TongQuan", "TongQuan")">
+                                <i class="bi bi-speedometer2"></i> <span>Tổng quan</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "BaiViets")">
+                                <i class="bi bi-file-earmark-text"></i> <span>Bài viết</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "DanhMucs")"> <i class="bi bi-folder"></i> <span>Danh mục</span> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "NguoiDungs")"> <i class="bi bi-people"></i> <span>Quản Lý</span> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "BinhLuans")">
+                                <i class="bi bi-chat-dots"></i> <span>Bình luận</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "ThongKes")"> <i class="bi bi-bar-chart"></i> <span>Thống kê</span> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> <i class="bi bi-gear"></i> <span>Cài đặt</span> </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main id="mainContent" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Topbar -->
+                <nav class="navbar topbar navbar-expand-lg navbar-light">
+                    <div class="container-fluid">
+                        <button class="btn btn-outline-secondary" id="sidebarToggle">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <div class="search-bar ms-3">
+                            <i class="bi bi-search"></i>
+                            <input type="text" placeholder="Search Here" />
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                        <div class="ms-auto d-flex align-items-center">
+                            <span class="dark-mode-toggle me-3" id="darkModeToggle">
+                                <i class="bi bi-moon"></i>
+                            </span>
+                            <div class="dropdown">
+                                <a href="#"
+                                   class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    <img src="https://via.placeholder.com/40"
+                                         alt="Avatar"
+                                         class="rounded-circle me-2"
+                                         width="40"
+                                         height="40" />
+                                    <strong>Admin</strong>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+
+                <!-- Overview Cards -->
+                <div class="cards row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Tổng số bài viết</h5>
+                                    <p class="card-text fs-4">120</p>
+                                </div>
+                                <i class="bi bi-file-earmark-text fs-3"></i>
+                                <!-- Icon cho Tổng số bài viết -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-white bg-success mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Bài viết chờ duyệt</h5>
+                                    <p class="card-text fs-4">15</p>
+                                </div>
+                                <i class="bi bi-clock fs-3"></i>
+                                <!-- Icon cho Bài viết chờ duyệt -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-white bg-warning mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Lượt truy cập hôm nay</h5>
+                                    <p class="card-text fs-4">2,345</p>
+                                </div>
+                                <i class="bi bi-eye fs-3"></i>
+                                <!-- Icon cho Lượt truy cập hôm nay -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-white bg-danger mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Thu nhập quảng cáo</h5>
+                                    <p class="card-text fs-4">$500</p>
+                                </div>
+                                <i class="bi bi-cash fs-3"></i>
+                                <!-- Icon cho Thu nhập quảng cáo -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Recent Articles Table -->
+                <div class="table-responsive">
+                    <table class="table-striped table-sm">
+                        @RenderBody()
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.querySelector(".sidebar");
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        const mainContent = document.querySelector("main");
+        const tableColor = document.querySelector(".table-responsive");
+
+        // Active sidebar
+        document.addEventListener("DOMContentLoaded", function () {
+            const navLinks = document.querySelectorAll(".nav-link");
+
+            // Lấy trạng thái active từ localStorage
+            const activeNavLink = localStorage.getItem("activeNavLink");
+
+            if (activeNavLink) {
+                // Xóa class active hiện tại
+                document.querySelector(".nav-link.active")?.classList.remove("active");
+
+                // Thêm class active vào nav-link được lưu
+                const savedNavLink = document.querySelector(`[href="${activeNavLink}"]`);
+                if (savedNavLink) savedNavLink.classList.add("active");
+            }
+
+            navLinks.forEach(navLink => {
+                navLink.addEventListener("click", function () {
+                    // Xóa class active hiện tại
+                    document.querySelector(".nav-link.active")?.classList.remove("active");
+
+                    // Thêm class active vào nav-link được nhấn
+                    this.classList.add("active");
+
+                    // Lưu đường dẫn vào localStorage
+                    const href = this.getAttribute("href");
+                    localStorage.setItem("activeNavLink", href);
+                });
+            });
+        });
+
+        // sidebarToggle
+        sidebarToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("collapsed");
+            if (mainContent.classList.contains("col-lg-10")) {
+                mainContent.classList.remove("col-lg-10");
+                mainContent.classList.add("col-lg-11");
+            } else {
+                mainContent.classList.remove("col-lg-11");
+                mainContent.classList.add("col-lg-10");
+            }
+        });
+
+        // Dark Mode
+        darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            tableColor.style.backgroundColor = "#fff";
+        });
+    </script>
+    <script src="~/Plugin/ckfinder/ckfinder.js"></script>
+    <script src="~/Plugin/ckeditor/ckeditor.js"></script>
+</body>
+@RenderSection("CodeJS", required: false)
+
+</html>

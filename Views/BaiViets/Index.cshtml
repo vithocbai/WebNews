@@ -1,0 +1,94 @@
+﻿@model IEnumerable<WebNews.Models.BaiViet>
+@using System.Text.RegularExpressions
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin.cshtml";
+}
+
+@{
+    var mainNews = ViewBag.MainNews as List<WebNews.Models.BaiViet>;
+}
+
+<div class="container-full">
+    <h2>BÀI VIẾT</h2>
+
+    <p>
+        @Html.ActionLink("Thêm Mới", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DanhMuc.TenDanhMuc)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.TieuDe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoiDung)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.TrangThai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Anh)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DanhMuc.TenDanhMuc)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TieuDe)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.NoiDung)*@
+
+                    @* Loại bỏ thẻ HTML và hiển thị văn bản thuần túy *@
+                    @Html.Raw(HttpUtility.HtmlDecode(StripHtmlTags(item.NoiDung)))
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TrangThai)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Anh))
+                    {
+                        <img src="@Url.Content("~/Hinhsanpham/" + item.Anh)" alt="Ảnh bìa" style="width: 120px; height: 50px; object-fit: cover" />
+                    }
+                </td>
+                <td>
+                    <!-- Edit button with icon -->
+                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-sm btn-primary text-decoration-none">
+                        <i class="bi bi-pencil"></i>
+                    </a> |
+
+                    <!-- Details button with icon -->
+                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-sm btn-info text-decoration-none">
+                        <i class="bi bi-eye"></i>
+                    </a> |
+
+                    <!-- Delete button with icon -->
+                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-sm btn-danger text-decoration-none">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+
+            </tr>
+        }
+
+    </table>
+</div>
+
+@functions {
+    public static string StripHtmlTags(string input)
+    {
+        return Regex.Replace(input, "<.*?>", String.Empty);
+    }
+}

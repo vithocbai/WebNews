@@ -1,0 +1,67 @@
+﻿@model IEnumerable<WebNews.Models.ThongKe>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin.cshtml";
+}
+
+
+<div class="container-full">
+    <h2>THỐNG KÊ</h2>
+
+    <p>
+        @Html.ActionLink("Thêm Mới", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BaiViet.TieuDe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LuotXem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LuotThich)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayCapNhat)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BaiViet.TieuDe)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LuotXem)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LuotThich)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayCapNhat)
+                </td>
+                <td>
+                    <!-- Edit button with icon -->
+                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-sm btn-primary text-decoration-none">
+                        <i class="bi bi-pencil"></i>
+                    </a> |
+
+                    <!-- Details button with icon -->
+                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-sm btn-info text-decoration-none">
+                        <i class="bi bi-eye"></i>
+                    </a> |
+
+                    <!-- Delete button with icon -->
+                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-sm btn-danger text-decoration-none">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+    </div>

@@ -1,0 +1,92 @@
+﻿@model WebNews.Models.BaiViet
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin.cshtml";
+}
+<link href="~/assets/styleAdmin.css" rel="stylesheet" />
+
+<div>
+    <h4>Bài Viết / Chi Tiết</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DanhMuc.TenDanhMuc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DanhMuc.TenDanhMuc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NguoiDung.TenDangNhap)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NguoiDung.TenDangNhap)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TieuDe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TieuDe)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoiDung)
+        </dt>
+
+        @*<dd>
+            @Html.DisplayFor(model => model.NoiDung)
+        </dd>*@
+
+        <dd>
+            <textarea  id="MoTaEditor" name="NoiDung" rows="4" readonly>@Model.NoiDung</textarea>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NgayDang)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NgayDang)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Anh)
+        </dt>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrangThai)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrangThai)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Thoát", "Index", null, new { @class = "btn btn-secondary" })
+</p>
+
+@section CodeJS {
+    <script>
+        // finner
+        // B1 gán link
+        // B2 connector.aspx
+        // B3 config.js
+        // B4 add reference 2 file trong debug
+        CKEDITOR.replace("MoTaEditor", {
+            allowedContent: true,
+            extraAllowedContent: 'img[src,alt,width,height]',
+            filebrowserBrowseUrl: '/Plugin/ckfinder/ckfinder.html', // Đường dẫn mở trình duyệt CKFinder
+            filebrowserUploadUrl: '/Plugin/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images', // Đường dẫn upload file
+            filebrowserImageBrowseUrl: '/Plugin/ckfinder/ckfinder.html?type=Images', // Duyệt hình ảnh
+            filebrowserImageUploadUrl: '/Plugin/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images' // Upload hình ảnh
+        });
+
+    </script>
+}

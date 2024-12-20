@@ -1,0 +1,57 @@
+﻿@model WebNews.Models.ThongKe
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin.cshtml";
+}
+
+<link href="~/assets/styleAdmin.css" rel="stylesheet" />
+
+<div>
+    <h4>THỐNG KÊ</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BaiViet.TieuDe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BaiViet.TieuDe)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LuotXem)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LuotXem)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LuotThich)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LuotThich)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NgayCapNhat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NgayCapNhat)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Quay Lại Danh Sách", "Index")
+        </div>
+    }
+</div>

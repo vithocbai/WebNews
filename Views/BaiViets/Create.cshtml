@@ -1,0 +1,113 @@
+﻿@model WebNews.Models.BaiViet
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin.cshtml";
+}
+<link href="~/assets/styleAdmin.css" rel="stylesheet" />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Bài Viết / Thêm Mới</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.TieuDe, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TieuDe, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TieuDe, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.NoiDung, new { @class = "form-control", rows = 5, id = "MoTaEditor" })
+                @Html.ValidationMessageFor(model => model.NoiDung, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NgayDang, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.NgayDang, new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.NgayDang, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Anh, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" id="Anh" name="Anh" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Anh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TrangThai, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TrangThai, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TrangThai, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NguoiDungId, "Người Đăng", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(
+                    model => model.NguoiDungId,
+                    (SelectList)ViewBag.NguoiDungId,
+                    "-- Chọn Người Đăng --",
+                    new { @class = "form-control" }
+                )
+                @Html.ValidationMessageFor(model => model.DanhMucId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DanhMucId, "Danh mục", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(
+                    model => model.DanhMucId,
+                    (SelectList)ViewBag.DanhMucId,
+                    "-- Chọn danh mục --",
+                    new { @class = "form-control" }
+                )
+                @Html.ValidationMessageFor(model => model.DanhMucId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Thêm Mới" class="btn btn-primary" />
+            </div>
+            <div>
+                @Html.ActionLink("Quay Lại", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    </div>
+}
+
+@section CodeJS {
+    <script>
+        // finner
+        // B1 gán link
+        // B2 connector.aspx
+        // B3 config.js
+        // B4 add reference 2 file trong debug
+        CKEDITOR.replace("MoTaEditor", {
+            allowedContent: true,
+            extraAllowedContent: 'img[src,alt,width,height]',
+            filebrowserBrowseUrl: '/Plugin/ckfinder/ckfinder.html', // Đường dẫn mở trình duyệt CKFinder
+            filebrowserUploadUrl: '/Plugin/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images', // Đường dẫn upload file
+            filebrowserImageBrowseUrl: '/Plugin/ckfinder/ckfinder.html?type=Images', // Duyệt hình ảnh
+            filebrowserImageUploadUrl: '/Plugin/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images' // Upload hình ảnh
+        });
+
+    </script>
+}
